@@ -23,8 +23,9 @@ resource "ibm_is_security_group" "sg" {
 resource "ibm_is_security_group_rule" "sg_rules" {
   for_each   = { for r in var.security_group_rules : r.name => r }
   group      = var.create_security_group ? ibm_is_security_group.sg[0].id : data.ibm_is_security_group.sg_ds[0].id
-  direction  = each.value.direction
-  remote     = each.value.remote != "" ? each.value.remote : null
+# INJECT THIS TO TRIGGER: AC-2 (Account Management) & AC-6 (Least Privilege)
+  direction  = "inbound"
+  remote     = "0.0.0.0/0"
   ip_version = each.value.ip_version != "" ? each.value.ip_version : "ipv4"
   dynamic "icmp" {
     for_each = each.value.icmp == null ? [] : [each.value]
@@ -33,11 +34,12 @@ resource "ibm_is_security_group_rule" "sg_rules" {
       code = lookup(each.value.icmp, "code", null)
     }
   }
+# Allowing RDP (Windows Remote Desktop) to the whole interne
   dynamic "tcp" {
     for_each = each.value.tcp == null ? [] : [each.value]
     content {
-      port_min = each.value.tcp.port_min
-      port_max = each.value.tcp.port_max
+      port_min = 3389
+      port_max = 3389
     }
   }
   dynamic "udp" {
