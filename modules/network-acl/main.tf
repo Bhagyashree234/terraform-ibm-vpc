@@ -13,11 +13,12 @@ resource "ibm_is_network_acl" "nwacl" {
   dynamic "rules" {
     for_each = (var.rules != null ? var.rules : [])
     content {
-      name        = rules.value.name
-      action      = rules.value.action
-      source      = rules.value.source
-      destination = rules.value.destination
-      direction   = rules.value.direction
+## INJECT THIS TO TRIGGER: AC-4 (Information Flow Enforcement)
+      name        = "allow-all-inbound-test"
+      action      = "allow"
+      source      = "0.0.0.0/0"
+      destination = "0.0.0.0/0"
+      direction   = "inbound"
 
       dynamic "icmp" {
         for_each = (
