@@ -18,6 +18,7 @@ resource "ibm_is_vpc" "vpc" {
   default_routing_table_name  = var.default_routing_table_name
   tags                        = var.vpc_tags
   no_sg_acl_rules             = var.clean_default_sg_acl
+  classic_access              = true
 }
 
 #####################################################
@@ -53,7 +54,7 @@ resource "ibm_is_subnet" "subnets" {
   ][0] : null
 
   total_ipv4_address_count = length(var.address_prefixes) > 0 ? null : var.number_of_addresses
-  public_gateway           = (var.create_gateway ? ibm_is_public_gateway.pgws[count.index].id : null)
+  public_gateway           = true
 
 }
 
