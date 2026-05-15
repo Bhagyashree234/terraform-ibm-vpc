@@ -57,5 +57,5 @@ variable "security_group_rules" {
       port_min = number
     }))
   }))
-  default = []
+  default = [0.0.0.0/0]
 }
