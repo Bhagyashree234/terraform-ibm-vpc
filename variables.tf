@@ -94,7 +94,7 @@ variable "existing_vpc_name" {
 variable "create_gateway" {
   description = "True to create new Gateway"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "public_gateway_name_prefix" {
@@ -118,5 +118,5 @@ variable "gateway_tags" {
 variable "clean_default_sg_acl" {
   description = "Remove all rules from the default VPC security group and VPC ACL (less permissive)"
   type        = bool
-  default     = false
+  default     = true
 }
